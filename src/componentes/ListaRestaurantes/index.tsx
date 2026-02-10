@@ -1,9 +1,14 @@
+import { useEffect, useState } from 'react';
 import IRestaurante from '../../interfaces/IRestaurante';
 import style from './ListaRestaurantes.module.scss';
 import Restaurante from './Restaurante';
+import axios from 'axios';
 
+const BASE_URL = 'http://localhost:8000';
 const ListaRestaurantes = () => {
 
+  const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([]);
+/* 
   const restaurantes: IRestaurante[] = [
     {
       id: 1,
@@ -87,7 +92,17 @@ const ListaRestaurantes = () => {
         }
       ]
     }
-  ]
+  ] */
+
+  useEffect(() => {
+    console.log(restaurantes);
+    axios.get(BASE_URL + '/api/v1/restaurantes/').then(res => {
+      setRestaurantes(res.data.results);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }, [])
 
   return (<section className={style.ListaRestaurantes}>
     <h1>Os restaurantes mais <em>bacanas</em>!</h1>
