@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import IRestaurante from "../../../interfaces/IRestaurante";
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
+import IRestaurante from "../../../interfaces/IRestaurante";
 
 const BASE_URL = 'http://localhost:8000';
 export const AdministracaoRestaurantes = () => {
@@ -13,6 +14,18 @@ export const AdministracaoRestaurantes = () => {
             setRestaurantes(res.data);
         });
     }, []);
+
+    const excluir = (restauranteParaExcluir: IRestaurante) => {
+        axios.delete(BASE_URL + `/api/v2/restaurantes/${restauranteParaExcluir.id}/`).then(() => {
+            setRestaurantes(restaurantes.filter(restaurante => restaurante.id !== restauranteParaExcluir.id));
+            alert('Restaurante excluído com sucesso!');
+        }).catch(err => {
+            alert('Erro ao excluir restaurante');
+            console.log(err);
+        } 
+
+    );
+    }
 
     return (
         <>
@@ -29,7 +42,10 @@ export const AdministracaoRestaurantes = () => {
                         {restaurantes.map(restaurante => (
                             <TableRow key={restaurante.id}>
                                 <TableCell>{restaurante.nome}</TableCell>
-                                 <TableCell>[ <Link to={`/administracao/restaurantes/${restaurante.id}`}>editar</Link>]</TableCell>
+                                 <TableCell><Link to={`/admin/restaurantes/${restaurante.id}`}>editar</Link></TableCell>
+                                <TableCell onClick={() => excluir(restaurante)}>
+                                    <Button>Excluir</Button>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
