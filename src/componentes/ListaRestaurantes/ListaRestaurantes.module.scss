@@ -2,3 +2,42 @@
   margin-top: 1.5rem;
   padding: 2rem;
 }
+
+.paginacao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.paginacao button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ff6b6b;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.paginacao button:hover:not(:disabled) {
+  background-color: #fa5252;
+  transform: translateY(-2px);
+}
+
+.paginacao button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.numeroPagina {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+  background-color: #f1f3f5;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
