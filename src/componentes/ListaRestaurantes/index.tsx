@@ -1,13 +1,12 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { IPaginacao } from '../../interfaces/IPaginacao';
 import IRestaurante from '../../interfaces/IRestaurante';
 import style from './ListaRestaurantes.module.scss';
-import Restaurante from './Restaurante';
-import {IPaginacao} from '../../interfaces/IPaginacao';
-import axios from 'axios';
-import IPrato from '../../interfaces/IPrato';
+import { Restaurante } from './Restaurante';
 
 const BASE_URL = 'http://localhost:8000';
-const ListaRestaurantes = () => {
+export const ListaRestaurantes = () => {
 
   const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([]);
   const [proximaPagina, setProximaPagina] = useState('');
@@ -159,5 +158,3 @@ const ListaRestaurantes = () => {
  
   </section>)
 }
-
-export default ListaRestaurantes

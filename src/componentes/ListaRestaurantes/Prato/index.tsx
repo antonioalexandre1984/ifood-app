@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import IPrato from '../../../interfaces/IPrato';
 import estilos from './Prato.module.scss';
 
@@ -6,7 +5,7 @@ interface PratoProps {
   prato: IPrato
 }
 
-const Prato = ({ prato }: PratoProps) => {
+export const Prato = ({ prato }: PratoProps) => {
   
   return (<div className={estilos.Prato}>
     <div className={estilos.Container}>
@@ -27,5 +26,3 @@ const Prato = ({ prato }: PratoProps) => {
     </div>
   </div>)
 }
-
-export default Prato
