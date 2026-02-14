@@ -1,38 +1,37 @@
-import RestaurantIcon from '@mui/icons-material/Restaurant';
-import { Avatar, Box, Button, Container, Paper, TextField, Typography } from '@mui/material';
-import axios from 'axios';
+import StorefrontIcon from '@mui/icons-material/Storefront'; // Ícone para o título
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import bgprato from '../../../componentes/images/12-Hotel-Camburi-Site-Rota-gastronomica.png';
-const BASE_URL = 'http://localhost:8000'
-
-// URL de uma imagem de doces coloridos (você pode substituir pela sua)
-const BACKGROUND_IMAGE = bgprato;
+import { http } from '../../../http';
 
 export const FormularioRestaurantes = () => {
   const paramarRestaurante = useParams()
   const navigate = useNavigate()
-  const [nomeRestaurante, setNomeRestaurante] = useState<string>('')
+  const [nomeRestaurante, setNomeRestaurante] = useState('')
 
   useEffect(() => {
     if (paramarRestaurante.id) {
-      axios
-        .get(`${BASE_URL}/api/v2/restaurantes/${paramarRestaurante.id}/`)
+      http
+        .get(`/restaurantes/${paramarRestaurante.id}/`)
         .then((res) => setNomeRestaurante(res.data.nome))
     }
   }, [paramarRestaurante])
 
   const aoSubmeterForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    
-    const promise = paramarRestaurante.id
-      ? axios.put(`${BASE_URL}/api/v2/restaurantes/${paramarRestaurante.id}/`, { nome: nomeRestaurante })
-      : axios.post(`${BASE_URL}/api/v2/restaurantes/`, { nome: nomeRestaurante });
 
-    const msgSucesso = paramarRestaurante.id 
-      ? 'Restaurante atualizado com sucesso! 🚀' 
-      : 'Restaurante cadastrado com sucesso! ✨';
+    const promise = paramarRestaurante.id
+      ? http.put(`/restaurantes/${paramarRestaurante.id}/`, {
+          nome: nomeRestaurante,
+        })
+      : http.post(`/restaurantes/`, {
+          nome: nomeRestaurante,
+        })
+
+    const msgSucesso = paramarRestaurante.id
+      ? 'Restaurante atualizado com sucesso! 🚀'
+      : 'Restaurante cadastrado com sucesso! ✨'
 
     promise
       .then(() => {
@@ -46,84 +45,62 @@ export const FormularioRestaurantes = () => {
   }
 
   return (
-    // Box Principal que cobre a tela toda com a imagem
-    <Box
-      sx={{
-        minHeight: '100vh',
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundImage: `url(${BACKGROUND_IMAGE})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        position: 'relative',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(255, 255, 255, 0.6)', // Camada branca opaca para suavizar
-          backdropFilter: 'blur(1px)', // Efeito de desfoque profissional
-          zIndex: 1
-        }
-      }}
-    >
-      <Container maxWidth="sm" sx={{ position: 'relative', zIndex: 2 }}>
-        <Paper 
-          elevation={6} 
-          sx={{ 
-            p: 4, 
-            borderRadius: 4, 
-            backgroundColor: 'rgba(255, 255, 255, 0.95)' // Papel levemente transparente
-          }}
-        >
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main', width: 56, height: 56 }}>
-              <RestaurantIcon fontSize="large" />
-            </Avatar>
-            
-            <Typography component="h1" variant="h4" sx={{ mb: 3, fontWeight: '800', color: '#333' }}>
-              {paramarRestaurante.id ? 'Editar Doceria' : 'Nova Doceria'}
-            </Typography>
+    <Container maxWidth="md">
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: "column", 
+        alignItems: "center",
+        py: 3 
+      }}>
+        {/* Cabeçalho do Formulário */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
+          <StorefrontIcon color="primary" fontSize="large" />
+          <Typography component="h1" variant="h5" fontWeight="600" color="text.primary">
+            {paramarRestaurante.id ? 'Editar Restaurante' : 'Novo Restaurante'}
+          </Typography>
+        </Box>
 
-            <Box component="form" onSubmit={aoSubmeterForm} sx={{ width: '100%' }}>
-              <TextField
-                value={nomeRestaurante}
-                label="Nome do Estabelecimento"
-                variant="outlined"
-                onChange={(e) => setNomeRestaurante(e.target.value)}
-                fullWidth
-                required
-                sx={{ mb: 3 }}
-              />
-              
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                  <Button 
-                      fullWidth 
-                      variant="outlined" 
-                      color="inherit"
-                      onClick={() => navigate('/admin/restaurantes')}
-                  >
-                      Cancelar
-                  </Button>
-                  <Button 
-                      type="submit" 
-                      fullWidth 
-                      variant="contained" 
-                      color="secondary"
-                      size="large"
-                      sx={{ fontWeight: 'bold' }}
-                  >
-                      Salvar
-                  </Button>
-              </Box>
-            </Box>
+        {/* Formulário */}
+        <Box 
+          component="form" 
+          onSubmit={aoSubmeterForm} 
+          sx={{ width: '100%', mt: 1 }}
+        >
+          <TextField
+            value={nomeRestaurante}
+            onChange={evento => setNomeRestaurante(evento.target.value)}
+            label="Nome do Restaurante"
+            variant="outlined" // Estilo mais robusto
+            fullWidth
+            required
+            placeholder="Ex: Cantina da Nonna"
+            sx={{ mb: 3 }}
+          />
+
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+            <Button 
+              variant="text" 
+              color="inherit" 
+              onClick={() => navigate('/admin/restaurantes')}
+            >
+              Cancelar
+            </Button>
+            
+            <Button 
+              type="submit" 
+              variant="contained" 
+              size="large"
+              sx={{ 
+                px: 4, 
+                fontWeight: 'bold',
+                boxShadow: 2
+              }}
+            >
+              Salvar Alterações
+            </Button>
           </Box>
-        </Paper>
-      </Container>
-    </Box>
+        </Box>
+      </Box>
+    </Container>
   )
 }

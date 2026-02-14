@@ -17,29 +17,31 @@ import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { http } from "../../../http";
-import IRestaurante from "../../../interfaces/IRestaurante";
+import IPrato from "../../../interfaces/IPrato";
 
-export const AdministracaoRestaurantes = () => {
-    const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([]);
+const BASE_URL = 'http://localhost:8000';
 
-    const carregarRestaurantes = () => {
-        http.get<IRestaurante[]>(`/restaurantes/`)
-            .then(res => setRestaurantes(res.data))
-            .catch(err => toast.error("Erro ao carregar restaurantes"));
+export const AdministracaoPratos = () => {
+    const [pratos, setPratos] = useState<IPrato[]>([]);
+
+    const carregarPratos = () => {
+        http.get<IPrato[]>(`/pratos/`)
+            .then(res => setPratos(res.data))
+            .catch(err => toast.error("Erro ao carregar os pratos"));
     }
 
     useEffect(() => {
-        carregarRestaurantes();
+        carregarPratos();
     }, []);
 
-    const excluir = (restauranteParaExcluir: IRestaurante) => {
-        http.delete(`/restaurantes/${restauranteParaExcluir.id}/`)
+    const excluir = (pratosParaExcluir: IPrato) => {
+        http.delete(`/pratos/${pratosParaExcluir.id}/`)
             .then(() => {
-                setRestaurantes(restaurantes.filter(r => r.id !== restauranteParaExcluir.id));
-                toast.success('Restaurante removido com sucesso!');
+                setPratos(pratos.filter(r => r.id !== pratosParaExcluir.id));
+                toast.success('Prato removido com sucesso!');
             })
             .catch(err => {
-                toast.error('Não foi possível excluir o restaurante.');
+                toast.error('Não foi possível excluir o prato.');
                 console.error(err);
             });
     }
@@ -47,7 +49,7 @@ export const AdministracaoRestaurantes = () => {
     return (
         <Box>
             <Typography variant="h5" component="h1" sx={{ mb: 3, fontWeight: 'bold', color: 'primary.main' }}>
-                Gerenciar Restaurantes
+                Gerenciar Pratos
             </Typography>
 
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
@@ -59,10 +61,10 @@ export const AdministracaoRestaurantes = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {restaurantes.map(restaurante => (
-                            <TableRow key={restaurante.id} sx={{ '&:hover': { bgcolor: '#f5f5f5' } }}>
+                        {pratos.map(prato => (
+                            <TableRow key={prato.id} sx={{ '&:hover': { bgcolor: '#f5f5f5' } }}>
                                 <TableCell sx={{ fontWeight: 500 }}>
-                                    {restaurante.nome}
+                                    {prato.nome}
                                 </TableCell>
                                 <TableCell align="center">
                                     <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
@@ -72,7 +74,7 @@ export const AdministracaoRestaurantes = () => {
                                                 size="small"
                                                 startIcon={<EditIcon />}
                                                 component={RouterLink}
-                                                to={`/admin/restaurantes/${restaurante.id}`}
+                                                to={`/admin/pratos/${prato.id}`}
                                             >
                                                 Editar
                                             </Button>
@@ -84,7 +86,7 @@ export const AdministracaoRestaurantes = () => {
                                                 size="small"
                                                 color="error"
                                                 startIcon={<DeleteOutlineIcon />}
-                                                onClick={() => excluir(restaurante)}
+                                                onClick={() => excluir(prato)}
                                             >
                                                 Excluir
                                             </Button>
@@ -93,10 +95,10 @@ export const AdministracaoRestaurantes = () => {
                                 </TableCell>
                             </TableRow>
                         ))}
-                        {restaurantes.length === 0 && (
+                        {pratos.length === 0 && (
                             <TableRow>
                                 <TableCell colSpan={2} align="center" sx={{ py: 3, color: 'text.secondary' }}>
-                                    Nenhum restaurante cadastrado.
+                                    Nenhum prato cadastrado.
                                 </TableCell>
                             </TableRow>
                         )}
