@@ -1,6 +1,7 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import {
+    Avatar,
     Box,
     Button,
     Paper,
@@ -19,7 +20,7 @@ import { toast } from 'react-toastify';
 import { http } from "../../../http";
 import IPrato from "../../../interfaces/IPrato";
 
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'http://localhost:8000/media/';
 
 export const AdministracaoPratos = () => {
     const [pratos, setPratos] = useState<IPrato[]>([]);
@@ -47,22 +48,46 @@ export const AdministracaoPratos = () => {
     }
 
     return (
-        <Box>
+
+        < Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', // Centraliza horizontalmente
+        width: '100%', 
+        py: 4 
+    }}>
+        <Box sx={{width: '80%', display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 2}}>
             <Typography variant="h5" component="h1" sx={{ mb: 3, fontWeight: 'bold', color: 'primary.main' }}>
                 Gerenciar Pratos
             </Typography>
-
-            <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
-                <Table size="medium">
+            <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 3 }}>
+                <Table size="medium" sx={{ minWidth: 650 }}>
                     <TableHead sx={{ bgcolor: 'primary.main' }}>
-                        <TableRow>
-                            <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Nome do Restaurante</TableCell>
-                            <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>Ações</TableCell>
+                        <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            <TableCell sx={{ color: 'white', fontWeight: 'bold', width: 50 }}>Imagem</TableCell>
+                            <TableCell sx={{ color: 'white', fontWeight: 'bold',width: 25 }}>Nome do Restaurante</TableCell>
+                            <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold',width: 25 }}>Ações</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {pratos.map(prato => (
-                            <TableRow key={prato.id} sx={{ '&:hover': { bgcolor: '#f5f5f5' } }}>
+                            <TableRow key={prato.id} sx={{ '&:hover': { bgcolor: '#ece7e7' } }}>
+                                <TableCell>
+                                    <Avatar 
+                                        src={prato.imagem} alt={prato.nome} 
+                                        sx={{ 
+                                            width: 48,
+                                             height: 48,
+                                              boxShadow: 1,
+                                              bgcolor: '#f2745f',
+                                              color: 'white',
+                                              fontWeight: 'bold',
+                                              border: '2px solid #f2745f',
+                                             }}
+                                      >
+                                        <span>{prato.nome.charAt(0).toUpperCase()}</span>
+                                    </Avatar>
+
+                                </TableCell>
                                 <TableCell sx={{ fontWeight: 500 }}>
                                     {prato.nome}
                                 </TableCell>
@@ -97,7 +122,7 @@ export const AdministracaoPratos = () => {
                         ))}
                         {pratos.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={2} align="center" sx={{ py: 3, color: 'text.secondary' }}>
+                                <TableCell colSpan={3} align="center" sx={{ py: 3, color: 'text.secondary' }}>
                                     Nenhum prato cadastrado.
                                 </TableCell>
                             </TableRow>
@@ -105,6 +130,7 @@ export const AdministracaoPratos = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+        </Box>
         </Box>
     );
 }
