@@ -45,62 +45,91 @@ export const FormularioRestaurantes = () => {
   }
 
   return (
-    <Container maxWidth="md">
-      <Box sx={{ 
-        display: 'flex', 
-        flexDirection: "column", 
-        alignItems: "center",
-        py: 3 
-      }}>
-        {/* Cabeçalho do Formulário */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-          <StorefrontIcon color="primary" fontSize="large" />
-          <Typography component="h1" variant="h5" fontWeight="600" color="text.primary">
-            {paramarRestaurante.id ? 'Editar Restaurante' : 'Novo Restaurante'}
-          </Typography>
-        </Box>
+   <Container maxWidth="md">
+  <Box sx={{ 
+    display: 'flex', 
+    flexDirection: "column", 
+    alignItems: "center",
+    py: { xs: 2, sm: 4 }, // Menos espaçamento vertical no mobile
+    px: { xs: 1, sm: 0 }  // Pequeno respiro lateral no mobile
+  }}>
+    {/* Cabeçalho do Formulário */}
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 4 }}>
+      <StorefrontIcon color="primary" sx={{ fontSize: { xs: 28, sm: 35 } }} />
+      <Typography 
+        component="h1" 
+        variant="h5" 
+        sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' }, fontWeight: '600' }}
+      >
+        {paramarRestaurante.id ? 'Editar Restaurante' : 'Novo Restaurante'}
+      </Typography>
+    </Box>
 
-        {/* Formulário */}
-        <Box 
-          component="form" 
-          onSubmit={aoSubmeterForm} 
-          sx={{ width: '100%', mt: 1 }}
-        >
-          <TextField
-            value={nomeRestaurante}
-            onChange={evento => setNomeRestaurante(evento.target.value)}
-            label="Nome do Restaurante"
-            variant="outlined" // Estilo mais robusto
-            fullWidth
-            required
-            placeholder="Ex: Cantina da Nonna"
-            sx={{ mb: 3 }}
-          />
+    {/* Formulário */}
+    <Box 
+  component="form" 
+  onSubmit={aoSubmeterForm} 
+  sx={{ 
+    width: '100%', 
+    maxWidth: '450px', // Reduzido para um visual mais focado
+    mt: 1 
+  }}
+>
+  <TextField
+    value={nomeRestaurante}
+    onChange={evento => setNomeRestaurante(evento.target.value)}
+    label="Nome do Restaurante"
+    variant="outlined"
+    fullWidth
+    required
+    size="small" // Input mais compacto
+    sx={{ 
+        mb: 3,
+        '& .MuiInputBase-input': { fontSize: '0.9rem' } 
+    }}
+  />
 
-          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-            <Button 
-              variant="text" 
-              color="inherit" 
-              onClick={() => navigate('/admin/restaurantes')}
-            >
-              Cancelar
-            </Button>
-            
-            <Button 
-              type="submit" 
-              variant="contained" 
-              size="large"
-              sx={{ 
-                px: 4, 
-                fontWeight: 'bold',
-                boxShadow: 2
-              }}
-            >
-              Salvar Alterações
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-    </Container>
+  <Box sx={{ 
+    display: 'flex', 
+    flexDirection: { xs: 'column-reverse', sm: 'row' }, 
+    gap: 1.5, // Espaçamento menor entre botões
+    justifyContent: 'flex-end' 
+  }}>
+    <Button 
+      variant="outlined" // Agora com borda para ganhar cor
+      color="error"      // Cor vermelha para o cancelamento
+      size="small"       // Botão menor
+      onClick={() => navigate('/admin/restaurantes')}
+      sx={{ 
+        px: 3, 
+        fontSize: '0.8rem',
+        textTransform: 'none', // Remove o Caps Lock automático (opcional)
+        borderColor: 'error.light'
+      }}
+    >
+      Cancelar
+    </Button>
+    
+    <Button 
+      type="submit" 
+      variant="contained" 
+      color="primary"
+      size="small" // Botão menor para combinar com a tabela
+      sx={{ 
+        px: 3, 
+        py: 1,
+        fontWeight: '600',
+        fontSize: '0.8rem',
+        textTransform: 'none',
+        boxShadow: 1
+      }}
+    >
+      {paramarRestaurante.id ? 'Salvar Alterações' : 'Cadastrar'}
+    </Button>
+  </Box>
+</Box>
+  </Box>
+</Container>
+   
   )
 }

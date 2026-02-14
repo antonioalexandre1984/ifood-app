@@ -137,17 +137,18 @@ export const FormularioPratos = () => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          py: 3,
+          py: { xs: 2, sm: 4 },
+          px: { xs: 1, sm: 0 }
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-          <RestaurantMenuIcon color="primary" fontSize="large" />
-          <Typography component="h1" variant="h5" fontWeight="600">
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 4 }}>
+          <RestaurantMenuIcon color="primary" sx={{fontSize:{xs:28,sm:35}}} />
+          <Typography component="h1" variant="h5" fontWeight="600" sx={{fontSize:{xs:'1.25rem',sm:'1.5rem'}}}>
             {paramarPrato.id ? 'Editar Prato' : 'Novo Prato'}
           </Typography>
         </Box>
 
-        <Box component="form" onSubmit={aoSubmeterForm} sx={{ width: '100%' }}>
+        <Box component="form" onSubmit={aoSubmeterForm} sx={{ width: '100%', maxWidth: '600px' }}>
           <TextField
             value={nomePrato}
             onChange={(e) => setNomePrato(e.target.value)}
@@ -168,7 +169,7 @@ export const FormularioPratos = () => {
             sx={{ mb: 2 }}
           />
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+          <Box sx={{ display: 'flex', gap: 2, mb: 3, flexDirection:{xs:'column',sm:'row'} }}>
             <TextField
               select
               value={tag}
@@ -203,10 +204,11 @@ export const FormularioPratos = () => {
             {/* Campo de Imagem */}
             <Box
               sx={{
-                mb: 3,
+                mb: 4,
                 display: 'flex',
-                alignItems: 'flex-start',
-                gap: 2,
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: 'center',
+                gap: 1,
                 width: '100%',
               }}
             >
@@ -214,6 +216,7 @@ export const FormularioPratos = () => {
                 label="Arquivo da Imagem"
                 value={imagem ? imagem.name : nomeArquivoImagem}
                 fullWidth
+                //sx={{height: { xs: '45px', sm: '40px' }}}
                 required={!paramarPrato.id}
                 onKeyDown={aoPressionarTecla}
                 placeholder="Nenhum arquivo selecionado, clique em 'Selecionar'"
@@ -221,7 +224,7 @@ export const FormularioPratos = () => {
                   readOnly: true,
                   startAdornment: (
                     <InputAdornment position="start">
-                      <ImageIcon color="primary" />
+                      <ImageIcon color="primary" fontSize="small" />
                     </InputAdornment>
                   ),
                   // Ícone de lixeira aparece apenas se houver imagem
@@ -244,8 +247,9 @@ export const FormularioPratos = () => {
               <Button
                 variant="outlined"
                 component="label"
+                fullWidth={window.innerWidth < 600}
                 sx={{
-                  height: '56px',
+                  height: { xs: '100%', sm: '40px' },
                   minWidth: '130px',
                   fontWeight: 'bold',
                   transition: 'all 0.3s ease-in-out', // Transição suave
